@@ -22,7 +22,6 @@ export default function CartSidebar() {
   });
 
   const [paymentMethod, setPaymentMethod] = useState("cod");
-  const [paymentScreenshot, setPaymentScreenshot] = useState(null);
 
   const handleInputChange = (e) => {
     setCustomerInfo({
@@ -34,11 +33,6 @@ export default function CartSidebar() {
   const handlePlaceOrder = () => {
     if (!customerInfo.name || !customerInfo.address || !customerInfo.phone) {
       alert('Please fill in all required fields (Name, Phone, Address)');
-      return;
-    }
-
-    if (paymentMethod === "online" && !paymentScreenshot) {
-      alert("Please upload payment screenshot for online payment");
       return;
     }
 
@@ -61,11 +55,6 @@ ${itemsText}
 
 *Payment Method:* ${paymentMethod === "cod" ? "Cash on Delivery" : "Online Payment"}
 
-${paymentMethod === "online"
-        ? "*Upload Screenshot:* Please attach payment screenshot after chat opens."
-        : ""
-      }
-
 Notes: ${customerInfo.notes || 'None'}
     `;
 
@@ -77,7 +66,6 @@ Notes: ${customerInfo.notes || 'None'}
 
     clearCart();
     setCustomerInfo({ name: '', address: '', phone: '', notes: '' });
-    setPaymentScreenshot(null);
     setIsCartOpen(false);
   };
 
@@ -85,7 +73,7 @@ Notes: ${customerInfo.notes || 'None'}
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
-      <div className="absolute  bg-black bg-opacity-50" onClick={() => setIsCartOpen(false)} />
+      <div className="absolute bg-black bg-opacity-50" onClick={() => setIsCartOpen(false)} />
 
       <div className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-xl">
         <div className="flex flex-col h-full">
@@ -208,24 +196,16 @@ Notes: ${customerInfo.notes || 'None'}
                         type="radio"
                         name="payment"
                         checked={paymentMethod === "online"}
-                        onChange={() => setPaymentMethod("online")}
+                        onChange={() => {
+                          setPaymentMethod("online");
+                          alert("Please share your payment screenshot after opening WhatsApp!");
+                        }}
                       />
+
                       <span>Pay Online</span>
                     </label>
                   </div>
                 </div>
-
-                {paymentMethod === "online" && (
-                  <div className="pt-2">
-                    <h3 className="font-semibold mb-1">Upload Payment Screenshot *</h3>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => setPaymentScreenshot(e.target.files[0])}
-                      className="w-full p-2 border rounded-lg"
-                    />
-                  </div>
-                )}
               </div>
 
               <button
