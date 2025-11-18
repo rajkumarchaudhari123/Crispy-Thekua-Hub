@@ -28,7 +28,7 @@ export default function Footer() {
                     <h3 className="font-semibold text-lg mb-3">Customer Support</h3>
                     <ul className="space-y-2">
                         <li>Call: +91 96670 48566</li>
-                        <li>Email: support@shuddhswad.com</li>
+                        <li>Email: support@raj&neeraj.com</li>
                         <li className="hover:text-orange-700 cursor-pointer">Shipping Policy</li>
                         <li className="hover:text-orange-700 cursor-pointer">Refund Policy</li>
                     </ul>

@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ShoppingCart, Menu, X } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import CartSidebar from "./CartSidebar";
@@ -8,6 +9,18 @@ import CartSidebar from "./CartSidebar";
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const { getTotalItems, setIsCartOpen } = useCart();
+  const pathname = usePathname();
+
+  const navItems = [
+    { href: "/", label: "Home" },
+    { href: "/products", label: "Products" },
+    { href: "/about", label: "About" },
+    { href: "/contact", label: "Contact" }
+  ];
+
+  const isActive = (path) => {
+    return pathname === path;
+  };
 
   return (
     <>
@@ -21,17 +34,26 @@ export default function Navbar() {
 
           {/* Desktop Menu */}
           <ul className="hidden md:flex gap-8 text-lg font-medium">
-            <li><Link className="hover:text-orange-600" href="/">Home</Link></li>
-            <li><Link className="hover:text-orange-600" href="/products">Products</Link></li>
-            <li><Link className="hover:text-orange-600" href="/about">About</Link></li>
-            <li><Link className="hover:text-orange-600" href="/contact">Contact</Link></li>
+            {navItems.map((item) => (
+              <li key={item.href}>
+                <Link
+                  className={`transition-colors duration-200 ${isActive(item.href)
+                      ? "text-orange-600 font-semibold border-b-2 border-orange-600"
+                      : "text-gray-700 hover:text-orange-600"
+                    }`}
+                  href={item.href}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
           </ul>
 
           {/* Right Side Icons */}
           <div className="flex items-center gap-4">
             <div className="relative">
-              <ShoppingCart 
-                className="w-6 h-6 cursor-pointer text-orange-600" 
+              <ShoppingCart
+                className="w-6 h-6 cursor-pointer text-orange-600 hover:text-orange-700 transition-colors"
                 onClick={() => setIsCartOpen(true)}
               />
               {getTotalItems() > 0 && (
@@ -42,7 +64,10 @@ export default function Navbar() {
             </div>
 
             {/* Mobile Menu Button */}
-            <button className="md:hidden" onClick={() => setOpen(!open)}>
+            <button
+              className="md:hidden text-gray-700 hover:text-orange-600 transition-colors"
+              onClick={() => setOpen(!open)}
+            >
               {open ? <X size={28} /> : <Menu size={28} />}
             </button>
           </div>
@@ -50,17 +75,27 @@ export default function Navbar() {
 
         {/* Mobile Dropdown */}
         {open && (
-          <div className="md:hidden bg-white py-4 shadow-md">
-            <ul className="flex flex-col gap-4 px-6 text-lg">
-              <li><Link className="hover:text-orange-600" href="/">Home</Link></li>
-              <li><Link className="hover:text-orange-600" href="/products">Products</Link></li>
-              <li><Link className="hover:text-orange-600" href="/about">About</Link></li>
-              <li><Link className="hover:text-orange-600" href="/contact">Contact</Link></li>
+          <div className="md:hidden bg-white py-4 shadow-lg border-t">
+            <ul className="flex flex-col gap-3 px-6 text-lg">
+              {navItems.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    className={`block py-2 px-4 rounded-lg transition-all duration-200 ${isActive(item.href)
+                        ? "bg-orange-100 text-orange-600 font-semibold border-l-4 border-orange-600"
+                        : "text-gray-700 hover:bg-gray-100 hover:text-orange-600"
+                      }`}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         )}
       </nav>
-      
+
       <CartSidebar />
     </>
   );
