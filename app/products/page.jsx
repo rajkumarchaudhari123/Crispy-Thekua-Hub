@@ -1,6 +1,6 @@
 "use client";
 import { useCart } from "../context/CartContext";
-import { Star, Shield, Truck, Clock, Heart, Award, Users } from "lucide-react";
+import { Star, Shield, Truck, Clock, Heart, Award, Users, ShoppingCart } from "lucide-react";
 
 export default function ProductsPage() {
     const traditionalThekuaVariants = [
@@ -48,7 +48,7 @@ export default function ProductsPage() {
         }
     ];
 
-    const { addToCart } = useCart();
+    const { addToCart, getTotalItems, setIsCartOpen } = useCart();
 
     const handleAddToCart = (product, variant) => {
         addToCart(product, variant);
@@ -104,6 +104,19 @@ export default function ProductsPage() {
                 </div>
             </section>
 
+            {/* Quick Cart Access Button - Floating */}
+            {getTotalItems() > 0 && (
+                <div className="fixed top-24 right-6 z-40">
+                    <button
+                        onClick={() => setIsCartOpen(true)}
+                        className="flex items-center gap-2 bg-orange-600 text-white px-4 py-3 rounded-full shadow-lg hover:bg-orange-700 transition-all duration-300 hover:shadow-xl transform hover:scale-105"
+                    >
+                        <ShoppingCart className="w-5 h-5" />
+                        <span className="font-semibold">View Cart ({getTotalItems()})</span>
+                    </button>
+                </div>
+            )}
+
             {/* Features Section */}
             <section className="max-w-6xl mx-auto px-6 py-12">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -132,6 +145,20 @@ export default function ProductsPage() {
 
             {/* Products Grid */}
             <section className="max-w-6xl mx-auto px-6 py-8">
+                {/* Cart Access Button - Inside Section */}
+                <div className="flex justify-between items-center mb-8">
+                    <h2 className="text-3xl font-bold text-gray-800">Choose Your Pack</h2>
+                    {getTotalItems() > 0 && (
+                        <button
+                            onClick={() => setIsCartOpen(true)}
+                            className="flex items-center gap-2 bg-orange-600 text-white px-5 py-2 rounded-lg hover:bg-orange-700 transition-colors shadow-md"
+                        >
+                            <ShoppingCart className="w-4 h-4" />
+                            <span>View Cart ({getTotalItems()} items)</span>
+                        </button>
+                    )}
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {traditionalThekuaVariants.map((product) => (
                         <div key={product.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-orange-100">
@@ -208,6 +235,32 @@ export default function ProductsPage() {
                 </div>
             </section>
 
+            {/* Quick Order Section */}
+            <section className="max-w-6xl mx-auto px-6 py-8">
+                <div className="bg-gradient-to-r from-orange-500 to-yellow-500 rounded-2xl p-8 text-center text-white">
+                    <h3 className="text-2xl font-bold mb-4">Quick Order Access</h3>
+                    <p className="text-lg mb-6 opacity-90">
+                        Added items to cart? Review your order and proceed to checkout
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                        <button
+                            onClick={() => setIsCartOpen(true)}
+                            className="flex items-center gap-3 bg-white text-orange-600 px-6 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors shadow-lg"
+                        >
+                            <ShoppingCart className="w-5 h-5" />
+                            <span>View Cart & Checkout</span>
+                        </button>
+                        <div className="text-sm opacity-80">
+                            {getTotalItems() > 0 ? (
+                                <span>{getTotalItems()} items in cart • Ready to order</span>
+                            ) : (
+                                <span>Add items to cart to proceed</span>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* Traditional Recipe Story */}
             <section className="max-w-6xl mx-auto px-6 py-16">
                 <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-2xl shadow-lg p-8 border border-orange-200">
@@ -263,8 +316,12 @@ export default function ProductsPage() {
                         Order now and experience the real taste of Bihari thekua made with love and tradition
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button className="px-8 py-3 bg-white text-orange-600 rounded-lg font-bold hover:bg-gray-100 transition-colors shadow-lg">
-                            Order Now
+                        <button
+                            onClick={() => setIsCartOpen(true)}
+                            className="flex items-center justify-center gap-2 px-8 py-3 bg-white text-orange-600 rounded-lg font-bold hover:bg-gray-100 transition-colors shadow-lg"
+                        >
+                            <ShoppingCart className="w-5 h-5" />
+                            <span>View Cart & Order</span>
                         </button>
                         <button className="px-8 py-3 border-2 border-white text-white rounded-lg font-bold hover:bg-white hover:text-orange-600 transition-colors">
                             Call: 9667048566
