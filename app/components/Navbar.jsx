@@ -50,18 +50,32 @@ export default function Navbar() {
           </ul>
 
           {/* Right Side Icons */}
-          <div className="relative">
-            <ShoppingCart
-              className="w-6 h-6 cursor-pointer text-orange-600 hover:text-orange-700 transition-colors"
-              onClick={() => setIsCartOpen(true)}
-            />
-            {getTotalItems() > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">
-                {getTotalItems()}
-              </span>
-            )}
-          </div>
+          <div className="flex items-center gap-4">
+            {/* Cart Button */}
+            <div className="relative">
+              <button
+                className="p-2 rounded-full hover:bg-orange-50 transition-all duration-200 active:scale-95"
+                onClick={() => setIsCartOpen(true)}
+              >
+                <ShoppingCart
+                  className="w-6 h-6 text-orange-600 transition-colors"
+                />
+              </button>
+              {getTotalItems() > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center shadow-sm">
+                  {getTotalItems()}
+                </span>
+              )}
+            </div>
 
+            {/* Mobile Menu Button - YEH WAPAS ADD KAR DIYA */}
+            <button
+              className="md:hidden p-2 rounded-full text-gray-700 hover:bg-gray-100 hover:text-orange-600 transition-all duration-200 active:scale-95"
+              onClick={() => setOpen(!open)}
+            >
+              {open ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Dropdown */}
