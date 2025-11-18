@@ -1,7 +1,7 @@
 "use client";
-import React, { useState } from 'react';
-import { X, Plus, Minus, Trash2, CreditCard, Wallet, Smartphone } from 'lucide-react';
-import { useCart } from '../context/CartContext';
+import React, { useState } from "react";
+import { X, Plus, Minus, Trash2 } from "lucide-react";
+import { useCart } from "../context/CartContext";
 
 export default function CartSidebar() {
   const {
@@ -11,98 +11,178 @@ export default function CartSidebar() {
     getTotalPrice,
     isCartOpen,
     setIsCartOpen,
-    clearCart
+    clearCart,
   } = useCart();
 
   const [customerInfo, setCustomerInfo] = useState({
-    name: '',
-    address: '',
-    phone: '',
-    notes: ''
+    name: "",
+    address: "",
+    phone: "",
+    notes: "",
+    paymentMethod: "COD",
+    transactionId: "",
+    screenshot: null,
+    screenshotURL: "",
   });
 
-  const [paymentMethod, setPaymentMethod] = useState('cash'); // 'cash' or 'online'
-  const [selectedUpiApp, setSelectedUpiApp] = useState('paytm'); // 'paytm', 'googlepay', 'phonepay'
+  const [isOrderProcessing, setIsOrderProcessing] = useState(false);
 
   const handleInputChange = (e) => {
     setCustomerInfo({
       ...customerInfo,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
+  const handleScreenshotUpload = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setCustomerInfo({
+          ...customerInfo,
+          screenshot: file,
+          screenshotURL: reader.result,
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handlePaymentMethod = (e) => {
+    const value = e.target.value;
+
+    setCustomerInfo({
+      ...customerInfo,
+      paymentMethod: value,
+      screenshot: null,
+      screenshotURL: "",
+      transactionId: "",
+    });
+
+    if (value === "UPI") {
+      alert(
+        `Please pay ₹${getTotalPrice()} on this UPI Number: 9315153604\nAfter payment, please upload the screenshot to place your order.`
+      );
+    }
+  };
+
   const generateWhatsAppMessage = () => {
-    const itemsText = cart.map(item =>
-      `${item.productName} - ${item.variant.qty} x ${item.quantity} = ₹${item.variant.price * item.quantity}`
-    ).join('\n');
+    const itemsText = cart
+      .map(
+        (item) =>
+          `${item.productName} - ${item.variant.qty} x ${item.quantity} = ₹${item.variant.price * item.quantity
+          }`
+      )
+      .join("\n");
 
-    const paymentText = paymentMethod === 'cash'
-      ? 'Cash on Delivery'
-      : `Online Payment (${selectedUpiApp.toUpperCase()})`;
+    const paymentText =
+      customerInfo.paymentMethod === "UPI"
+        ? `*Payment Method:* Online (UPI)
+*Transaction ID:* ${customerInfo.transactionId || "Not provided"}`
+        : `*Payment Method:* Cash On Delivery`;
 
-    const message = `*New Order Received!*\n\n*Customer Details:*\nName: ${customerInfo.name}\nPhone: ${customerInfo.phone}\nAddress: ${customerInfo.address}\n\n*Order Items:*\n${itemsText}\n\n*Total: ₹${getTotalPrice()}*\n*Payment Method: ${paymentText}*\n\nNotes: ${customerInfo.notes || 'None'}`;
+    const message = `*New Order Received!*
+
+*Customer Details:*
+Name: ${customerInfo.name}
+Phone: ${customerInfo.phone}
+Address: ${customerInfo.address}
+
+*Order Items:*
+${itemsText}
+
+*Total:* ₹${getTotalPrice()}
+
+${paymentText}
+
+Notes: ${customerInfo.notes || "None"}`;
 
     return encodeURIComponent(message);
   };
 
-  const getUpiUrl = () => {
-    const upiId = '9315153604@paytm';
-    const amount = getTotalPrice();
-
-    const upiUrls = {
-      paytm: `paytmmp://pay?pa=${upiId}&pn=Merchant&am=${amount}&cu=INR`,
-      googlepay: `tez://upi/pay?pa=${upiId}&pn=Merchant&am=${amount}&cu=INR`,
-      phonepay: `phonepe://pay?pa=${upiId}&pn=Merchant&am=${amount}&cu=INR`
-    };
-
-    return upiUrls[selectedUpiApp] || upiUrls.paytm;
-  };
-
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
     if (!customerInfo.name || !customerInfo.address || !customerInfo.phone) {
-      alert('Please fill in all required fields (Name, Phone, Address)');
+      alert("Please fill all required fields");
       return;
     }
 
-    if (paymentMethod === 'online') {
-      // For online payment - open selected UPI app
-      const upiUrl = getUpiUrl();
-
-      // Open UPI payment app
-      window.location.href = upiUrl;
-
-      // Also send WhatsApp message after a short delay
-      setTimeout(() => {
-        const phoneNumber = '9667048566';
-        const message = generateWhatsAppMessage();
-        const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
-        window.open(whatsappUrl, '_blank');
-      }, 2000);
-
-    } else {
-      // For cash on delivery - just send WhatsApp message
-      const phoneNumber = '9667048566';
-      const message = generateWhatsAppMessage();
-      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
-      window.open(whatsappUrl, '_blank');
+    // UPI payment के लिए screenshot required है
+    if (customerInfo.paymentMethod === "UPI" && !customerInfo.screenshot) {
+      alert("Please upload payment screenshot for UPI payment");
+      return;
     }
 
-    clearCart();
-    setCustomerInfo({ name: '', address: '', phone: '', notes: '' });
-    setPaymentMethod('cash');
-    setSelectedUpiApp('paytm');
-    setIsCartOpen(false);
+    setIsOrderProcessing(true);
+
+    try {
+      const phoneNumber = "9667048566";
+      const message = generateWhatsAppMessage();
+
+      // WhatsApp URL बनाएं
+      let whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+
+      // अगर screenshot है तो उसे भेजें
+      if (customerInfo.screenshot) {
+        // File को Blob में convert करें
+        const blob = await fetch(customerInfo.screenshotURL).then(r => r.blob());
+        const file = new File([blob], "payment_screenshot.jpg", { type: "image/jpeg" });
+
+        // WhatsApp के साथ image share करने का alternative तरीका
+        // Note: WhatsApp web API directly files नहीं ले सकता, इसलिए हम user को manually share करने के लिए कहेंगे
+        alert("Please share the payment screenshot manually in the WhatsApp chat that will open.");
+      }
+
+      // WhatsApp window खोलें
+      window.open(whatsappUrl, "_blank");
+
+      // Success message
+      setTimeout(() => {
+        alert("Order placed successfully! Please complete the payment screenshot sharing if required.");
+        clearCart();
+        setIsCartOpen(false);
+        setIsOrderProcessing(false);
+
+        // Reset form
+        setCustomerInfo({
+          name: "",
+          address: "",
+          phone: "",
+          notes: "",
+          paymentMethod: "COD",
+          transactionId: "",
+          screenshot: null,
+          screenshotURL: "",
+        });
+      }, 1000);
+
+    } catch (error) {
+      console.error("Error placing order:", error);
+      alert("Error placing order. Please try again.");
+      setIsOrderProcessing(false);
+    }
   };
+
+  // UPI payment के लिए place order button disable करने की condition
+  const isPlaceOrderDisabled =
+    isOrderProcessing ||
+    !customerInfo.name ||
+    !customerInfo.address ||
+    !customerInfo.phone ||
+    (customerInfo.paymentMethod === "UPI" && !customerInfo.screenshot);
 
   if (!isCartOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
-      <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setIsCartOpen(false)} />
+      <div
+        className="absolute inset-0 bg-black bg-opacity-50"
+        onClick={() => setIsCartOpen(false)}
+      />
 
       <div className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-xl">
         <div className="flex flex-col h-full">
-          {/* Header */}
           <div className="flex items-center justify-between p-4 border-b">
             <h2 className="text-xl font-bold text-orange-600">Your Cart</h2>
             <button
@@ -113,40 +193,63 @@ export default function CartSidebar() {
             </button>
           </div>
 
-          {/* Cart Items */}
           <div className="flex-1 overflow-y-auto p-4">
             {cart.length === 0 ? (
               <p className="text-center text-gray-500 mt-8">Your cart is empty</p>
             ) : (
               <div className="space-y-4">
                 {cart.map((item, index) => (
-                  <div key={index} className="flex items-center space-x-4 p-3 border rounded-lg">
+                  <div
+                    key={index}
+                    className="flex items-center space-x-4 p-3 border rounded-lg"
+                  >
                     <img
                       src={item.img}
                       alt={item.productName}
                       className="w-16 h-16 object-cover rounded"
                     />
+
                     <div className="flex-1">
                       <h3 className="font-semibold">{item.productName}</h3>
                       <p className="text-sm text-gray-600">{item.variant.qty}</p>
-                      <p className="text-orange-600 font-bold">₹{item.variant.price}</p>
+                      <p className="text-orange-600 font-bold">
+                        ₹{item.variant.price}
+                      </p>
                     </div>
+
                     <div className="flex items-center space-x-2">
                       <button
-                        onClick={() => updateQuantity(item.productId, item.variant.qty, item.quantity - 1)}
+                        onClick={() =>
+                          updateQuantity(
+                            item.productId,
+                            item.variant.qty,
+                            item.quantity - 1
+                          )
+                        }
                         className="p-1 rounded-full hover:bg-gray-100"
                       >
                         <Minus size={16} />
                       </button>
+
                       <span className="w-8 text-center">{item.quantity}</span>
+
                       <button
-                        onClick={() => updateQuantity(item.productId, item.variant.qty, item.quantity + 1)}
+                        onClick={() =>
+                          updateQuantity(
+                            item.productId,
+                            item.variant.qty,
+                            item.quantity + 1
+                          )
+                        }
                         className="p-1 rounded-full hover:bg-gray-100"
                       >
                         <Plus size={16} />
                       </button>
+
                       <button
-                        onClick={() => removeFromCart(item.productId, item.variant.qty)}
+                        onClick={() =>
+                          removeFromCart(item.productId, item.variant.qty)
+                        }
                         className="p-1 text-red-500 hover:bg-red-50 rounded-full ml-2"
                       >
                         <Trash2 size={16} />
@@ -158,160 +261,117 @@ export default function CartSidebar() {
             )}
           </div>
 
-          {/* Customer Info & Checkout */}
           {cart.length > 0 && (
             <div className="border-t p-4 space-y-4">
               <div className="text-xl font-bold text-orange-600 text-center">
                 Total: ₹{getTotalPrice()}
               </div>
 
-              {/* Payment Method */}
-              <div className="space-y-3">
-                <h3 className="font-semibold">Payment Method</h3>
+              <input
+                type="text"
+                name="name"
+                placeholder="Full Name *"
+                value={customerInfo.name}
+                onChange={handleInputChange}
+                className="w-full p-3 border rounded-lg"
+                required
+              />
 
-                <div className="grid grid-cols-2 gap-3">
-                  {/* Cash on Delivery Option */}
-                  <button
-                    onClick={() => setPaymentMethod('cash')}
-                    className={`p-3 border-2 rounded-lg flex flex-col items-center justify-center transition-all ${paymentMethod === 'cash'
-                        ? 'border-orange-500 bg-orange-50 text-orange-600'
-                        : 'border-gray-300 hover:border-orange-300'
-                      }`}
-                  >
-                    <Wallet size={24} className="mb-2" />
-                    <span className="font-medium">Cash on Delivery</span>
-                  </button>
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Phone Number *"
+                value={customerInfo.phone}
+                onChange={handleInputChange}
+                className="w-full p-3 border rounded-lg"
+                required
+              />
 
-                  {/* Online Payment Option */}
-                  <button
-                    onClick={() => setPaymentMethod('online')}
-                    className={`p-3 border-2 rounded-lg flex flex-col items-center justify-center transition-all ${paymentMethod === 'online'
-                        ? 'border-green-500 bg-green-50 text-green-600'
-                        : 'border-gray-300 hover:border-green-300'
-                      }`}
-                  >
-                    <CreditCard size={24} className="mb-2" />
-                    <span className="font-medium">Pay Online</span>
-                    <span className="text-xs mt-1">UPI Apps</span>
-                  </button>
-                </div>
+              <textarea
+                name="address"
+                placeholder="Delivery Address *"
+                value={customerInfo.address}
+                onChange={handleInputChange}
+                rows="3"
+                className="w-full p-3 border rounded-lg"
+                required
+              />
 
-                {paymentMethod === 'online' && (
-                  <div className="space-y-3">
-                    <h4 className="font-medium text-sm">Choose Payment App:</h4>
+              <textarea
+                name="notes"
+                placeholder="Additional Notes (optional)"
+                value={customerInfo.notes}
+                onChange={handleInputChange}
+                rows="2"
+                className="w-full p-3 border rounded-lg"
+              />
 
-                    <div className="grid grid-cols-3 gap-2">
-                      {/* Paytm */}
-                      <button
-                        onClick={() => setSelectedUpiApp('paytm')}
-                        className={`p-3 border-2 rounded-lg flex flex-col items-center justify-center transition-all ${selectedUpiApp === 'paytm'
-                            ? 'border-blue-500 bg-blue-50 text-blue-600'
-                            : 'border-gray-300 hover:border-blue-300'
-                          }`}
-                      >
-                        <Smartphone size={20} className="mb-1" />
-                        <span className="text-xs font-medium">Paytm</span>
-                      </button>
+              <select
+                name="paymentMethod"
+                value={customerInfo.paymentMethod}
+                onChange={handlePaymentMethod}
+                className="w-full p-3 border rounded-lg"
+              >
+                <option value="COD">Cash on Delivery</option>
+                <option value="UPI">UPI Online Payment</option>
+              </select>
 
-                      {/* Google Pay */}
-                      <button
-                        onClick={() => setSelectedUpiApp('googlepay')}
-                        className={`p-3 border-2 rounded-lg flex flex-col items-center justify-center transition-all ${selectedUpiApp === 'googlepay'
-                            ? 'border-teal-500 bg-teal-50 text-teal-600'
-                            : 'border-gray-300 hover:border-teal-300'
-                          }`}
-                      >
-                        <Smartphone size={20} className="mb-1" />
-                        <span className="text-xs font-medium">Google Pay</span>
-                      </button>
+              {customerInfo.paymentMethod === "UPI" && (
+                <div className="space-y-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <p className="text-sm text-yellow-800 font-semibold">
+                    Please pay ₹{getTotalPrice()} to UPI: 9315153604
+                  </p>
 
-                      {/* PhonePe */}
-                      <button
-                        onClick={() => setSelectedUpiApp('phonepay')}
-                        className={`p-3 border-2 rounded-lg flex flex-col items-center justify-center transition-all ${selectedUpiApp === 'phonepay'
-                            ? 'border-purple-500 bg-purple-50 text-purple-600'
-                            : 'border-gray-300 hover:border-purple-300'
-                          }`}
-                      >
-                        <Smartphone size={20} className="mb-1" />
-                        <span className="text-xs font-medium">PhonePe</span>
-                      </button>
-                    </div>
+                  <input
+                    type="text"
+                    name="transactionId"
+                    placeholder="UPI Transaction ID (optional)"
+                    value={customerInfo.transactionId}
+                    onChange={handleInputChange}
+                    className="w-full p-3 border rounded-lg"
+                  />
 
-                    <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
-                      <p className="text-sm text-blue-700 text-center">
-                        <strong>Pay to:</strong> 9315153604<br />
-                        <strong>UPI ID:</strong> 9315153604@paytm<br />
-                        <strong>Amount:</strong> ₹{getTotalPrice()}
-                      </p>
-                      <p className="text-xs text-blue-600 text-center mt-2">
-                        You'll be redirected to {selectedUpiApp === 'paytm' ? 'Paytm' : selectedUpiApp === 'googlepay' ? 'Google Pay' : 'PhonePe'} app
-                      </p>
-                    </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Payment Screenshot *
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleScreenshotUpload}
+                      className="w-full p-3 border rounded-lg"
+                      required
+                    />
+                    {customerInfo.screenshotURL && (
+                      <div className="mt-2">
+                        <img
+                          src={customerInfo.screenshotURL}
+                          alt="Payment Screenshot"
+                          className="w-32 h-32 mx-auto rounded border object-cover"
+                        />
+                        <p className="text-xs text-green-600 text-center mt-1">
+                          Screenshot uploaded successfully
+                        </p>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
+                </div>
+              )}
 
-              {/* Customer Information */}
-              <div className="space-y-3">
-                <h3 className="font-semibold">Customer Information</h3>
-
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Full Name *"
-                  value={customerInfo.name}
-                  onChange={handleInputChange}
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  required
-                />
-
-                <input
-                  type="tel"
-                  name="phone"
-                  placeholder="Phone Number *"
-                  value={customerInfo.phone}
-                  onChange={handleInputChange}
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  required
-                />
-
-                <textarea
-                  name="address"
-                  placeholder="Delivery Address *"
-                  value={customerInfo.address}
-                  onChange={handleInputChange}
-                  rows="3"
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  required
-                />
-
-                <textarea
-                  name="notes"
-                  placeholder="Additional Notes (optional)"
-                  value={customerInfo.notes}
-                  onChange={handleInputChange}
-                  rows="2"
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                />
-              </div>
-
-              {/* Order Button */}
               <button
                 onClick={handlePlaceOrder}
-                className={`w-full py-3 rounded-lg font-semibold transition-colors ${paymentMethod === 'online'
-                    ? 'bg-green-600 hover:bg-green-700 text-white'
-                    : 'bg-orange-600 hover:bg-orange-700 text-white'
+                disabled={isPlaceOrderDisabled}
+                className={`w-full py-3 rounded-lg font-semibold text-white ${isPlaceOrderDisabled
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-orange-600 hover:bg-orange-700"
                   }`}
               >
-                {paymentMethod === 'online'
-                  ? `Pay with ${selectedUpiApp === 'paytm' ? 'Paytm' : selectedUpiApp === 'googlepay' ? 'Google Pay' : 'PhonePe'}`
-                  : 'Place Order (Cash on Delivery)'}
+                {isOrderProcessing ? "Processing..." : "Place Order via WhatsApp"}
               </button>
 
-              {paymentMethod === 'online' && (
-                <p className="text-xs text-center text-gray-600">
-                  You'll be redirected to {selectedUpiApp === 'paytm' ? 'Paytm' : selectedUpiApp === 'googlepay' ? 'Google Pay' : 'PhonePe'} app for payment
+              {customerInfo.paymentMethod === "UPI" && !customerInfo.screenshot && (
+                <p className="text-sm text-red-600 text-center">
+                  Please upload payment screenshot to place order
                 </p>
               )}
             </div>
