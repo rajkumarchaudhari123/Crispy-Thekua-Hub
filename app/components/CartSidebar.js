@@ -1,7 +1,7 @@
 "use client";
-import React, { useState } from "react";
-import { X, Plus, Minus, Trash2 } from "lucide-react";
-import { useCart } from "../context/CartContext";
+import React, { useState } from 'react';
+import { X, Plus, Minus, Trash2 } from 'lucide-react';
+import { useCart } from '../context/CartContext';
 
 export default function CartSidebar() {
   const {
@@ -11,178 +11,85 @@ export default function CartSidebar() {
     getTotalPrice,
     isCartOpen,
     setIsCartOpen,
-    clearCart,
+    clearCart
   } = useCart();
 
   const [customerInfo, setCustomerInfo] = useState({
-    name: "",
-    address: "",
-    phone: "",
-    notes: "",
-    paymentMethod: "COD",
-    transactionId: "",
-    screenshot: null,
-    screenshotURL: "",
+    name: '',
+    address: '',
+    phone: '',
+    notes: ''
   });
 
-  const [isOrderProcessing, setIsOrderProcessing] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("cod");
+  const [paymentScreenshot, setPaymentScreenshot] = useState(null);
 
   const handleInputChange = (e) => {
     setCustomerInfo({
       ...customerInfo,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     });
   };
 
-  const handleScreenshotUpload = (e) => {
-    const file = e.target.files[0];
-
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setCustomerInfo({
-          ...customerInfo,
-          screenshot: file,
-          screenshotURL: reader.result,
-        });
-      };
-      reader.readAsDataURL(file);
+  const handlePlaceOrder = () => {
+    if (!customerInfo.name || !customerInfo.address || !customerInfo.phone) {
+      alert('Please fill in all required fields (Name, Phone, Address)');
+      return;
     }
-  };
 
-  const handlePaymentMethod = (e) => {
-    const value = e.target.value;
-
-    setCustomerInfo({
-      ...customerInfo,
-      paymentMethod: value,
-      screenshot: null,
-      screenshotURL: "",
-      transactionId: "",
-    });
-
-    if (value === "UPI") {
-      alert(
-        `Please pay ₹${getTotalPrice()} on this UPI Number: 9315153604\nAfter payment, please upload the screenshot to place your order.`
-      );
+    if (paymentMethod === "online" && !paymentScreenshot) {
+      alert("Please upload payment screenshot for online payment");
+      return;
     }
-  };
 
-  const generateWhatsAppMessage = () => {
-    const itemsText = cart
-      .map(
-        (item) =>
-          `${item.productName} - ${item.variant.qty} x ${item.quantity} = ₹${item.variant.price * item.quantity
-          }`
-      )
-      .join("\n");
+    const itemsText = cart.map(item =>
+      `${item.productName} — ${item.variant.qty} x ${item.quantity} = ₹${item.variant.price * item.quantity}`
+    ).join('\n');
 
-    const paymentText =
-      customerInfo.paymentMethod === "UPI"
-        ? `*Payment Method:* Online (UPI)
-*Transaction ID:* ${customerInfo.transactionId || "Not provided"}`
-        : `*Payment Method:* Cash On Delivery`;
+    const message = `
+*New Order Received!*
 
-    const message = `*New Order Received!*
+*Customer Details:*  
+Name: ${customerInfo.name}  
+Phone: ${customerInfo.phone}  
+Address: ${customerInfo.address}  
 
-*Customer Details:*
-Name: ${customerInfo.name}
-Phone: ${customerInfo.phone}
-Address: ${customerInfo.address}
-
-*Order Items:*
+*Order Items:*  
 ${itemsText}
 
-*Total:* ₹${getTotalPrice()}
+*Total:* ₹${getTotalPrice()}  
 
-${paymentText}
+*Payment Method:* ${paymentMethod === "cod" ? "Cash on Delivery" : "Online Payment"}
 
-Notes: ${customerInfo.notes || "None"}`;
-
-    return encodeURIComponent(message);
-  };
-
-  const handlePlaceOrder = async () => {
-    if (!customerInfo.name || !customerInfo.address || !customerInfo.phone) {
-      alert("Please fill all required fields");
-      return;
-    }
-
-    // UPI payment के लिए screenshot required है
-    if (customerInfo.paymentMethod === "UPI" && !customerInfo.screenshot) {
-      alert("Please upload payment screenshot for UPI payment");
-      return;
-    }
-
-    setIsOrderProcessing(true);
-
-    try {
-      const phoneNumber = "9667048566";
-      const message = generateWhatsAppMessage();
-
-      // WhatsApp URL बनाएं
-      let whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
-
-      // अगर screenshot है तो उसे भेजें
-      if (customerInfo.screenshot) {
-        // File को Blob में convert करें
-        const blob = await fetch(customerInfo.screenshotURL).then(r => r.blob());
-        const file = new File([blob], "payment_screenshot.jpg", { type: "image/jpeg" });
-
-        // WhatsApp के साथ image share करने का alternative तरीका
-        // Note: WhatsApp web API directly files नहीं ले सकता, इसलिए हम user को manually share करने के लिए कहेंगे
-        alert("Please share the payment screenshot manually in the WhatsApp chat that will open.");
+${paymentMethod === "online"
+        ? "*Upload Screenshot:* Please attach payment screenshot after chat opens."
+        : ""
       }
 
-      // WhatsApp window खोलें
-      window.open(whatsappUrl, "_blank");
+Notes: ${customerInfo.notes || 'None'}
+    `;
 
-      // Success message
-      setTimeout(() => {
-        alert("Order placed successfully! Please complete the payment screenshot sharing if required.");
-        clearCart();
-        setIsCartOpen(false);
-        setIsOrderProcessing(false);
+    const whatsappUrl = `https://wa.me/9667048566?text=${encodeURIComponent(
+      message.trim()
+    )}`;
 
-        // Reset form
-        setCustomerInfo({
-          name: "",
-          address: "",
-          phone: "",
-          notes: "",
-          paymentMethod: "COD",
-          transactionId: "",
-          screenshot: null,
-          screenshotURL: "",
-        });
-      }, 1000);
+    window.open(whatsappUrl, '_blank');
 
-    } catch (error) {
-      console.error("Error placing order:", error);
-      alert("Error placing order. Please try again.");
-      setIsOrderProcessing(false);
-    }
+    clearCart();
+    setCustomerInfo({ name: '', address: '', phone: '', notes: '' });
+    setPaymentScreenshot(null);
+    setIsCartOpen(false);
   };
-
-  // UPI payment के लिए place order button disable करने की condition
-  const isPlaceOrderDisabled =
-    isOrderProcessing ||
-    !customerInfo.name ||
-    !customerInfo.address ||
-    !customerInfo.phone ||
-    (customerInfo.paymentMethod === "UPI" && !customerInfo.screenshot);
 
   if (!isCartOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
-      <div
-        className="absolute inset-0 bg-black bg-opacity-50"
-        onClick={() => setIsCartOpen(false)}
-      />
+      <div className="absolute  bg-black bg-opacity-50" onClick={() => setIsCartOpen(false)} />
 
       <div className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-xl">
         <div className="flex flex-col h-full">
+
           <div className="flex items-center justify-between p-4 border-b">
             <h2 className="text-xl font-bold text-orange-600">Your Cart</h2>
             <button
@@ -199,57 +106,33 @@ Notes: ${customerInfo.notes || "None"}`;
             ) : (
               <div className="space-y-4">
                 {cart.map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center space-x-4 p-3 border rounded-lg"
-                  >
+                  <div key={index} className="flex items-center space-x-4 p-3 border rounded-lg">
                     <img
                       src={item.img}
                       alt={item.productName}
                       className="w-16 h-16 object-cover rounded"
                     />
-
                     <div className="flex-1">
                       <h3 className="font-semibold">{item.productName}</h3>
                       <p className="text-sm text-gray-600">{item.variant.qty}</p>
-                      <p className="text-orange-600 font-bold">
-                        ₹{item.variant.price}
-                      </p>
+                      <p className="text-orange-600 font-bold">₹{item.variant.price}</p>
                     </div>
-
                     <div className="flex items-center space-x-2">
                       <button
-                        onClick={() =>
-                          updateQuantity(
-                            item.productId,
-                            item.variant.qty,
-                            item.quantity - 1
-                          )
-                        }
+                        onClick={() => updateQuantity(item.productId, item.variant.qty, item.quantity - 1)}
                         className="p-1 rounded-full hover:bg-gray-100"
                       >
                         <Minus size={16} />
                       </button>
-
                       <span className="w-8 text-center">{item.quantity}</span>
-
                       <button
-                        onClick={() =>
-                          updateQuantity(
-                            item.productId,
-                            item.variant.qty,
-                            item.quantity + 1
-                          )
-                        }
+                        onClick={() => updateQuantity(item.productId, item.variant.qty, item.quantity + 1)}
                         className="p-1 rounded-full hover:bg-gray-100"
                       >
                         <Plus size={16} />
                       </button>
-
                       <button
-                        onClick={() =>
-                          removeFromCart(item.productId, item.variant.qty)
-                        }
+                        onClick={() => removeFromCart(item.productId, item.variant.qty)}
                         className="p-1 text-red-500 hover:bg-red-50 rounded-full ml-2"
                       >
                         <Trash2 size={16} />
@@ -267,113 +150,90 @@ Notes: ${customerInfo.notes || "None"}`;
                 Total: ₹{getTotalPrice()}
               </div>
 
-              <input
-                type="text"
-                name="name"
-                placeholder="Full Name *"
-                value={customerInfo.name}
-                onChange={handleInputChange}
-                className="w-full p-3 border rounded-lg"
-                required
-              />
+              <div className="space-y-3">
+                <h3 className="font-semibold">Customer Information</h3>
 
-              <input
-                type="tel"
-                name="phone"
-                placeholder="Phone Number *"
-                value={customerInfo.phone}
-                onChange={handleInputChange}
-                className="w-full p-3 border rounded-lg"
-                required
-              />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Full Name *"
+                  value={customerInfo.name}
+                  onChange={handleInputChange}
+                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                />
 
-              <textarea
-                name="address"
-                placeholder="Delivery Address *"
-                value={customerInfo.address}
-                onChange={handleInputChange}
-                rows="3"
-                className="w-full p-3 border rounded-lg"
-                required
-              />
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="Phone Number *"
+                  value={customerInfo.phone}
+                  onChange={handleInputChange}
+                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                />
 
-              <textarea
-                name="notes"
-                placeholder="Additional Notes (optional)"
-                value={customerInfo.notes}
-                onChange={handleInputChange}
-                rows="2"
-                className="w-full p-3 border rounded-lg"
-              />
+                <textarea
+                  name="address"
+                  placeholder="Delivery Address *"
+                  value={customerInfo.address}
+                  onChange={handleInputChange}
+                  rows="3"
+                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                />
 
-              <select
-                name="paymentMethod"
-                value={customerInfo.paymentMethod}
-                onChange={handlePaymentMethod}
-                className="w-full p-3 border rounded-lg"
-              >
-                <option value="COD">Cash on Delivery</option>
-                <option value="UPI">UPI Online Payment</option>
-              </select>
+                <textarea
+                  name="notes"
+                  placeholder="Additional Notes (optional)"
+                  value={customerInfo.notes}
+                  onChange={handleInputChange}
+                  rows="2"
+                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                />
 
-              {customerInfo.paymentMethod === "UPI" && (
-                <div className="space-y-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                  <p className="text-sm text-yellow-800 font-semibold">
-                    Please pay ₹{getTotalPrice()} to UPI: 9315153604
-                  </p>
+                <div className="pt-2">
+                  <h3 className="font-semibold mb-2">Payment Method</h3>
 
-                  <input
-                    type="text"
-                    name="transactionId"
-                    placeholder="UPI Transaction ID (optional)"
-                    value={customerInfo.transactionId}
-                    onChange={handleInputChange}
-                    className="w-full p-3 border rounded-lg"
-                  />
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Payment Screenshot *
+                  <div className="flex items-center space-x-4">
+                    <label className="flex items-center space-x-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="payment"
+                        checked={paymentMethod === "cod"}
+                        onChange={() => setPaymentMethod("cod")}
+                      />
+                      <span>Cash on Delivery</span>
                     </label>
+
+                    <label className="flex items-center space-x-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="payment"
+                        checked={paymentMethod === "online"}
+                        onChange={() => setPaymentMethod("online")}
+                      />
+                      <span>Pay Online</span>
+                    </label>
+                  </div>
+                </div>
+
+                {paymentMethod === "online" && (
+                  <div className="pt-2">
+                    <h3 className="font-semibold mb-1">Upload Payment Screenshot *</h3>
                     <input
                       type="file"
                       accept="image/*"
-                      onChange={handleScreenshotUpload}
-                      className="w-full p-3 border rounded-lg"
-                      required
+                      onChange={(e) => setPaymentScreenshot(e.target.files[0])}
+                      className="w-full p-2 border rounded-lg"
                     />
-                    {customerInfo.screenshotURL && (
-                      <div className="mt-2">
-                        <img
-                          src={customerInfo.screenshotURL}
-                          alt="Payment Screenshot"
-                          className="w-32 h-32 mx-auto rounded border object-cover"
-                        />
-                        <p className="text-xs text-green-600 text-center mt-1">
-                          Screenshot uploaded successfully
-                        </p>
-                      </div>
-                    )}
                   </div>
-                </div>
-              )}
+                )}
+              </div>
 
               <button
                 onClick={handlePlaceOrder}
-                disabled={isPlaceOrderDisabled}
-                className={`w-full py-3 rounded-lg font-semibold text-white ${isPlaceOrderDisabled
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-orange-600 hover:bg-orange-700"
-                  }`}
+                className="w-full bg-orange-600 text-white py-3 rounded-lg font-semibold hover:bg-orange-700 transition-colors"
               >
-                {isOrderProcessing ? "Processing..." : "Place Order via WhatsApp"}
+                Place Order via WhatsApp
               </button>
-
-              {customerInfo.paymentMethod === "UPI" && !customerInfo.screenshot && (
-                <p className="text-sm text-red-600 text-center">
-                  Please upload payment screenshot to place order
-                </p>
-              )}
             </div>
           )}
         </div>
