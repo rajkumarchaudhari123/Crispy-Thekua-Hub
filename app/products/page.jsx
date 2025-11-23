@@ -52,7 +52,7 @@ export default function ProductsPage() {
         {
             id: 4,
             title: "Traditional Sweet Gujiya - Classic Pack",
-            img: "https://media.istockphoto.com/id/1490582589/photo/two-pieces-of-indian-traditional-sweet-gujiya-on-a-white-plate.jpg?s=612x612&w=0&k=20&c=reRE6xwUb8Ze62jaRI91J4z5UTg4G41MTswOPSCCIZM=",
+            img: "https://tse3.mm.bing.net/th/id/OIP.ap02YGdeNZM6lGc71qNKwQHaEK?pid=Api&P=0&h=180",
             description: "Delicious traditional gujiya filled with sweet khoya and dry fruits. Perfect for Holi and Diwali celebrations.",
             variants: [
                 { qty: "6 Pieces", price: 180, popular: false, saving: "" },
@@ -80,7 +80,7 @@ export default function ProductsPage() {
         {
             id: 6,
             title: "Traditional Sweet Gujiya - Premium Pack",
-            img: "https://media.istockphoto.com/id/1308940802/photo/gujiya-traditional-indian-food-sweet-dumplings-made-during-the-holi-festival.webp?a=1&b=1&s=612x612&w=0&k=20&c=a2KR0Nf5e6Dbl10cGgR-WGuWDlR_HkYBOskgSOxc7N8=",
+            img: "https://tse1.mm.bing.net/th/id/OIP.Dh2oxwutoli8eQ2DSVh21AHaE6?pid=Api&P=0&h=180",
             description: "Premium gujiya with extra dry fruits, saffron, and cardamom. Made with pure ghee for authentic taste.",
             variants: [
                 { qty: "12 Pieces", price: 420, popular: false, saving: "" },
