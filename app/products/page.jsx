@@ -10,9 +10,9 @@ export default function ProductsPage() {
             img: "https://www.vegrecipesofindia.com/wp-content/uploads/2020/11/thekua-recipe18.jpg",
             description: "Our signature traditional thekua with perfect crispiness and authentic flavor. Made using grandma's secret recipe.",
             variants: [
-                { qty: "10 Pieces", price: 110, popular: false, },
-                { qty: "18 Pieces", price: 190, popular: true, },
-                { qty: "20 Pieces", price: 210, popular: false, }
+                { qty: "10 Pieces", price: 150, popular: false, },
+                { qty: "18 Pieces", price: 270, popular: true, },
+                { qty: "20 Pieces", price: 300, popular: false, }
             ],
             rating: 4.8,
             reviews: 124,
@@ -24,9 +24,9 @@ export default function ProductsPage() {
             img: "https://www.vegrecipesofindia.com/wp-content/uploads/2020/11/thekua-recipe-2.jpg",
             description: "Perfect for family gatherings and festivals. Extra crispy with enhanced ghee aroma and traditional spices.",
             variants: [
-                { qty: "25 Pieces", price: 255, popular: false },
-                { qty: "50 Pieces", price: 550, popular: true },
-                { qty: "100 Pieces", price: 1020, popular: false }
+                { qty: "25 Pieces", price: 375, popular: false },
+                { qty: "50 Pieces", price: 750, popular: true },
+                { qty: "100 Pieces", price: 1500, popular: false }
             ],
             rating: 4.9,
             reviews: 89,
@@ -38,9 +38,9 @@ export default function ProductsPage() {
             img: "https://tse1.mm.bing.net/th/id/OIP.rt1BgKLB7XWSJTuzL4WftQHaEK?pid=Api&P=0&h=180",
             description: "Special edition thekua made with extra love for festivals. Perfect for Chhath Puja, Diwali, and special occasions.",
             variants: [
-                { qty: "30 Pieces", price: 350, popular: false },
-                { qty: "51 Pieces", price: 540, popular: true },
-                { qty: "108 Pieces", price: 1200, popular: false, }
+                { qty: "30 Pieces", price: 450, popular: false },
+                { qty: "51 Pieces", price: 765, popular: true },
+                { qty: "108 Pieces", price: 1620, popular: false, }
             ],
             rating: 4.7,
             reviews: 156,
@@ -55,9 +55,9 @@ export default function ProductsPage() {
             img: "https://tse3.mm.bing.net/th/id/OIP.ap02YGdeNZM6lGc71qNKwQHaEK?pid=Api&P=0&h=180",
             description: "Delicious traditional gujiya filled with sweet khoya and dry fruits. Perfect for Holi and Diwali celebrations.",
             variants: [
-                { qty: "6 Pieces", price: 180, popular: false, saving: "" },
-                { qty: "12 Pieces", price: 360, popular: true, },
-                { qty: "18 Pieces", price: 540, popular: false, saving: "" }
+                { qty: "6 Pieces", price: 210, popular: false, saving: "" },
+                { qty: "12 Pieces", price: 420, popular: true, },
+                { qty: "18 Pieces", price: 630, popular: false, saving: "" }
             ],
             rating: 4.9,
             reviews: 98,
@@ -69,9 +69,9 @@ export default function ProductsPage() {
             img: "https://media.istockphoto.com/id/2206170459/photo/gujiya-or-gujia-is-a-popular-north-indian-sweet-of-flaky-pastries-with-khoya-nuts-stuffing.webp?a=1&b=1&s=612x612&w=0&k=20&c=y2cUiFzH_x1iyQQD8gvqWfe5Rn4Q_EsfbNPW5cg7OC4=",
             description: "Rich and flavorful gujiya with premium khoya, coconut, and assorted dry fruits. Family favorite!",
             variants: [
-                { qty: "24 Pieces", price: 720, popular: false, saving: "Save ₹30" },
-                { qty: "36 Pieces", price: 1080, popular: true, saving: "Save ₹60" },
-                { qty: "48 Pieces", price: 1440, popular: false, saving: "Save ₹120" }
+                { qty: "24 Pieces", price: 840, popular: false, saving: "Save ₹30" },
+                { qty: "36 Pieces", price: 1260, popular: true, saving: "Save ₹60" },
+                { qty: "48 Pieces", price: 1680, popular: false, saving: "Save ₹120" }
             ],
             rating: 4.8,
             reviews: 67,
@@ -284,7 +284,6 @@ export default function ProductsPage() {
                     <h2 className="text-3xl font-bold text-gray-800">Traditional Gujiya Collection</h2>
                     <div className="text-sm text-gray-600">
                         <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full font-semibold">
-                            ₹30 per piece
                         </span>
                     </div>
                 </div>
