@@ -24,9 +24,9 @@ export default function ProductsPage() {
             img: "https://www.vegrecipesofindia.com/wp-content/uploads/2020/11/thekua-recipe-2.jpg",
             description: "Perfect for family gatherings and festivals. Extra crispy with enhanced ghee aroma and traditional spices.",
             variants: [
-                { qty: "25 Pieces", price: 240, popular: false, saving: "Save ₹10" },
-                { qty: "50 Pieces", price: 450, popular: true, saving: "Save ₹50" },
-                { qty: "100 Pieces", price: 850, popular: false, saving: "Save ₹150" }
+                { qty: "25 Pieces", price: 255, popular: false },
+                { qty: "50 Pieces", price: 550, popular: true },
+                { qty: "100 Pieces", price: 1020, popular: false }
             ],
             rating: 4.9,
             reviews: 89,
@@ -38,9 +38,9 @@ export default function ProductsPage() {
             img: "https://tse1.mm.bing.net/th/id/OIP.rt1BgKLB7XWSJTuzL4WftQHaEK?pid=Api&P=0&h=180",
             description: "Special edition thekua made with extra love for festivals. Perfect for Chhath Puja, Diwali, and special occasions.",
             variants: [
-                { qty: "30 Pieces", price: 280, popular: false, saving: "" },
-                { qty: "51 Pieces", price: 450, popular: true, saving: "Save ₹30" },
-                { qty: "108 Pieces", price: 900, popular: false, saving: "Save ₹108" }
+                { qty: "30 Pieces", price: 350, popular: false },
+                { qty: "51 Pieces", price: 540, popular: true },
+                { qty: "108 Pieces", price: 1200, popular: false, }
             ],
             rating: 4.7,
             reviews: 156,
@@ -343,7 +343,6 @@ export default function ProductsPage() {
                                                     </span>
                                                 )}
                                                 <span className="text-xs text-gray-500 block mt-1">
-                                                    ₹30 per piece
                                                 </span>
                                             </div>
                                             <div className="flex items-center gap-3">
