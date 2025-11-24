@@ -10,9 +10,9 @@ export default function ProductsPage() {
             img: "https://www.vegrecipesofindia.com/wp-content/uploads/2020/11/thekua-recipe18.jpg",
             description: "Our signature traditional thekua with perfect crispiness and authentic flavor. Made using grandma's secret recipe.",
             variants: [
-                { qty: "10 Pieces", price: 100, popular: false, saving: "" },
-                { qty: "18 Pieces", price: 180, popular: true, saving: "Save ₹20" },
-                { qty: "20 Pieces", price: 200, popular: false, saving: "" }
+                { qty: "10 Pieces", price: 110, popular: false, },
+                { qty: "18 Pieces", price: 190, popular: true, },
+                { qty: "20 Pieces", price: 210, popular: false, }
             ],
             rating: 4.8,
             reviews: 124,
@@ -56,7 +56,7 @@ export default function ProductsPage() {
             description: "Delicious traditional gujiya filled with sweet khoya and dry fruits. Perfect for Holi and Diwali celebrations.",
             variants: [
                 { qty: "6 Pieces", price: 180, popular: false, saving: "" },
-                { qty: "12 Pieces", price: 360, popular: true, saving: "Save ₹20" },
+                { qty: "12 Pieces", price: 360, popular: true, },
                 { qty: "18 Pieces", price: 540, popular: false, saving: "" }
             ],
             rating: 4.9,
