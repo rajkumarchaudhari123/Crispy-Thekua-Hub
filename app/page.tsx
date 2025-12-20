@@ -1,163 +1,342 @@
 import React from "react";
 import Link from "next/link";
+import { FaStar, FaTruck, FaLeaf, FaHeart, FaUsers, FaShieldAlt, FaInstagram, FaFacebook, FaTwitter } from "react-icons/fa";
+import { GiHandBag } from "react-icons/gi";
 
 export default function Page() {
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white text-gray-900">
 
-      {/* Hero */}
-      <section className="bg-cover bg-center" style={{ backgroundImage: "linear-gradient(90deg, rgba(255,255,255,0.6), rgba(255,255,255,0.6)), url('/images/hero.jpg')" }}>
-        <div className="max-w-6xl mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-8">
-          <div className="flex-1">
-            <h1 className="text-4xl md:text-5xl font-extrabold">Authentic & Pure — Delivered to your doorstep</h1>
-            <p className="mt-4 text-gray-700 max-w-xl">Experience the true taste of tradition. High-quality, hygienic, and affordable traditional snacks made with love and purity.</p>
-            <div className="mt-6 flex gap-4">
-              <Link href="/products" className="px-6 py-3 bg-yellow-500 text-white rounded font-semibold hover:bg-yellow-600 transition-colors">
-                Shop Now
-              </Link>
-              <a href="#story" className="px-6 py-3 border rounded hover:bg-gray-100 transition-colors">
-                Our Story
-              </a>
+      {/* Hero Section */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-orange-500/10"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24 relative">
+          <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
+            <div className="flex-1 text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                <FaLeaf className="text-green-600" />
+                <span>100% Natural Ingredients</span>
+              </div>
+              
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+                Taste the
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600">
+                  Authentic Tradition
+                </span>
+              </h1>
+              
+              <p className="mt-6 text-lg md:text-xl text-gray-700 max-w-2xl">
+                Experience the perfect blend of traditional recipes and modern hygiene. Our crispy thekua brings memories of grandma's kitchen to your doorstep.
+              </p>
+              
+              <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Link 
+                  href="/products" 
+                  className="group relative px-8 py-4 bg-gradient-to-r from-amber-600 to-orange-600 text-white rounded-2xl font-semibold text-lg hover:shadow-2xl hover:shadow-orange-300 transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-3"
+                >
+                  <GiHandBag className="text-xl" />
+                  <span>Shop Now</span>
+                  <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-amber-600 to-orange-600 blur opacity-30 group-hover:opacity-50 transition-opacity"></div>
+                </Link>
+                <Link 
+                  href="#story"
+                  className="px-8 py-4 border-2 border-amber-600 text-amber-700 rounded-2xl font-semibold text-lg hover:bg-amber-50 transition-all duration-300 transform hover:-translate-y-1"
+                >
+                  Discover Our Story
+                </Link>
+              </div>
+              
+              <div className="mt-12 flex flex-wrap justify-center lg:justify-start gap-6">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-amber-700">5000+</div>
+                  <div className="text-gray-600">Happy Customers</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-amber-700">4.8★</div>
+                  <div className="text-gray-600">Average Rating</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-amber-700">15+</div>
+                  <div className="text-gray-600">Cities</div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="w-full md:w-1/2">
-            <img src="/hero-product.jpg" alt="Thekua" className="rounded-lg shadow-lg w-full" />
+            
+            <div className="relative lg:w-1/2">
+              <div className="relative z-10">
+                <img 
+                  src="https://st1.latestly.com/wp-content/uploads/2018/11/thekua-or-thekwa-781x441.jpg" 
+                  alt="Fresh Thekua"
+                  className="rounded-3xl shadow-2xl transform hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute -top-4 -right-4 bg-white p-4 rounded-2xl shadow-xl">
+                  <div className="text-amber-600 font-bold text-xl">₹120 Only</div>
+                  <div className="text-sm text-gray-600">Starting Price</div>
+                </div>
+              </div>
+              <div className="absolute -bottom-6 -left-6 w-64 h-64 bg-gradient-to-r from-amber-200 to-orange-200 rounded-full blur-2xl opacity-60"></div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Our Products - Single Product */}
-      <section id="products" className="max-w-4xl mx-auto px-6 py-16">
-        <h2 className="text-3xl font-bold text-center">Our Product</h2>
-        <p className="text-gray-600 mt-2 text-center">Discover our authentic traditional snack</p>
-
-        <div className="mt-8 flex justify-center">
-          <div className="bg-white p-8 rounded-2xl shadow-2xl border border-orange-200 max-w-md w-full transform hover:scale-105 transition-transform duration-300">
-            <img
-              src="https://www.vegrecipesofindia.com/wp-content/uploads/2020/11/thekua-recipe18.jpg"
-              alt="Traditional Crispy Thekua"
-              className="rounded-xl mb-6 w-full h-48 object-cover shadow-md"
-            />
-            <h4 className="font-bold text-2xl text-center text-gray-800">Traditional Crispy Thekua</h4>
-            <p className="text-gray-600 mt-3 text-center leading-relaxed">
-              Authentic Bihari-style crispy thekua made with whole wheat flour, jaggery, and aromatic spices. Perfect for festivals and everyday snacking.
+      {/* Featured Product */}
+      <section id="products" className="py-16 bg-gradient-to-b from-white to-amber-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              Our <span className="text-amber-600">Signature</span> Snack
+            </h2>
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+              Handcrafted with love using generations-old recipes
             </p>
-            <div className="mt-6 flex items-center justify-between">
+          </div>
+          
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="relative">
+              <div className="relative overflow-hidden rounded-3xl shadow-2xl">
+                <img
+                  src="https://www.vegrecipesofindia.com/wp-content/uploads/2020/11/thekua-recipe18.jpg"
+                  alt="Traditional Crispy Thekua"
+                  className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-700"
+                />
+              </div>
+              <div className="absolute -bottom-4 -right-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white p-6 rounded-2xl shadow-xl">
+                <div className="text-3xl font-bold">Best Seller</div>
+                <div className="text-sm opacity-90">Since 2025</div>
+              </div>
+            </div>
+            
+            <div className="space-y-6">
               <div>
-                <span className="font-bold text-2xl text-orange-600">₹100 - ₹200</span>
-                <p className="text-sm text-gray-500 mt-1">Starting from 10 pieces</p>
+                <div className="inline-flex items-center gap-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium">
+                  <FaStar />
+                  <span>Most Loved Product</span>
+                </div>
+                <h3 className="text-3xl font-bold mt-4">Traditional Crispy Thekua</h3>
+                <p className="text-gray-600 mt-2 text-lg">
+                  Authentic Bihari-style crispy thekua made with organic whole wheat flour, pure jaggery, and aromatic spices. Perfect for festivals, tea time, or as a wholesome snack.
+                </p>
               </div>
-              <Link
-                href="/products"
-                className="px-6 py-3 bg-orange-600 text-white rounded-lg font-semibold hover:bg-orange-700 transition-colors shadow-lg"
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-white p-4 rounded-xl shadow-lg border">
+                  <div className="text-amber-600 font-bold text-xl">₹100 - ₹200</div>
+                  <div className="text-sm text-gray-600">Multiple Packs Available</div>
+                </div>
+                <div className="bg-white p-4 rounded-xl shadow-lg border">
+                  <div className="flex items-center gap-2">
+                    <FaTruck className="text-green-600" />
+                    <span className="font-semibold">Free Delivery</span>
+                  </div>
+                  <div className="text-sm text-gray-600">Above ₹300</div>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <FaShieldAlt className="text-green-600 text-xl" />
+                  <span className="font-medium">100% Hygienic & Safe Packaging</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <FaLeaf className="text-green-600 text-xl" />
+                  <span className="font-medium">Made with Organic Ingredients</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <FaHeart className="text-red-600 text-xl" />
+                  <span className="font-medium">No Preservatives or Additives</span>
+                </div>
+              </div>
+              
+              <div className="pt-6">
+                <Link
+                  href="/products"
+                  className="block w-full py-4 bg-gradient-to-r from-amber-600 to-orange-600 text-white text-center rounded-2xl font-semibold text-lg hover:shadow-2xl hover:shadow-orange-300 transition-all duration-300 transform hover:-translate-y-1"
+                >
+                  Explore All Packs & Variants
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Reviews Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h3 className="text-4xl font-bold mb-4">Loved by Foodies</h3>
+            <p className="text-gray-600 text-lg">Join our community of satisfied customers</p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { name: "Rohan Sharma", role: "Food Blogger", rating: 5, comment: "The texture and taste are perfect. Reminds me of my grandmother's recipe.", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rohan" },
+              { name: "Priya Singh", role: "Homemaker", rating: 5, comment: "I was worried about hygiene with traditional snacks, but this is perfectly packaged and fresh.", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Priya" },
+              { name: "Ankit Kumar", role: "Software Engineer", rating: 5, comment: "Ordered for Chhath Puja, and everyone loved it. Will order again!", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ankit" },
+            ].map((review, index) => (
+              <div 
+                key={index} 
+                className="group bg-gradient-to-br from-white to-amber-50 p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-amber-100 hover:border-amber-300 transform hover:-translate-y-2"
               >
-                View All Packs
-              </Link>
-            </div>
-            <div className="mt-4 flex items-center justify-center gap-4 text-sm text-gray-600">
-              <div className="flex items-center gap-1">
-                <span className="text-yellow-500">★</span>
-                <span>4.8 (124 reviews)</span>
+                <div className="flex items-center gap-4 mb-6">
+                  <img src={review.avatar} alt={review.name} className="w-14 h-14 rounded-full" />
+                  <div>
+                    <div className="font-bold text-lg">{review.name}</div>
+                    <div className="text-gray-600 text-sm">{review.role}</div>
+                  </div>
+                </div>
+                <div className="flex text-amber-500 mb-4">
+                  {[...Array(review.rating)].map((_, i) => (
+                    <FaStar key={i} className="fill-current" />
+                  ))}
+                </div>
+                <p className="text-gray-700 italic">"{review.comment}"</p>
+                <div className="mt-6 pt-6 border-t border-amber-100">
+                  <div className="text-sm text-gray-500">Verified Purchase • 2 days ago</div>
+                </div>
               </div>
-              <div>•</div>
-              <div>🚚 Free Delivery</div>
-            </div>
+            ))}
           </div>
+          
+          
         </div>
       </section>
 
-      {/* Reviews Placeholder */}
-      <section className="bg-white border-t py-12">
-        <div className="max-w-6xl mx-auto px-6">
-          <h3 className="text-2xl font-bold">Customer Reviews</h3>
-          <p className="text-gray-600 mt-2">What customers say about Crispy Thekua Hub.</p>
-
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 bg-gray-50 rounded-lg shadow-sm border">
-              <div className="text-yellow-400 text-lg">★★★★★</div>
-              <div className="font-semibold mt-2">"Best thekua I've tasted!"</div>
-              <div className="text-gray-600 mt-2">The texture and taste are perfect. Reminds me of my grandmother's recipe.</div>
-              <div className="text-sm text-gray-500 mt-4">— Rohan Sharma</div>
+      {/* Story Section */}
+      <section id="story" className="py-16 bg-gradient-to-b from-amber-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="relative">
+              <div className="relative overflow-hidden rounded-3xl shadow-2xl">
+                <img
+                  src="https://images.unsplash.com/photo-1591123220262-87ed377f7c08?q=80&w=1173&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  alt="Traditional Kitchen"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+           
             </div>
-            <div className="p-6 bg-gray-50 rounded-lg shadow-sm border">
-              <div className="text-yellow-400 text-lg">★★★★★</div>
-              <div className="font-semibold mt-2">"Pure and hygienic"</div>
-              <div className="text-gray-600 mt-2">I was worried about hygiene with traditional snacks, but this is perfectly packaged and fresh.</div>
-              <div className="text-sm text-gray-500 mt-4">— Priya Singh</div>
+            
+            <div className="space-y-8">
+              <div>
+                <h3 className="text-4xl font-bold mb-6">
+                  Our <span className="text-amber-600">Journey</span> of Passion
+                </h3>
+                <p className="text-gray-700 text-lg leading-relaxed">
+                  What started as a small initiative during Chhath Puja 2020 has blossomed into a mission to preserve and share authentic Indian snacks with the world.
+                </p>
+              </div>
+              
+              <div className="space-y-6">
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
+                    <span className="text-amber-600 text-xl">🎯</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-xl mb-2">Our Mission</h4>
+                    <p className="text-gray-600">
+                      To be India's most trusted traditional snacks brand, delivering authentic taste with modern hygiene standards.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
+                    <span className="text-amber-600 text-xl">👁️</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-xl mb-2">Our Vision</h4>
+                    <p className="text-gray-600">
+                      Preserving culinary heritage while making it accessible to the modern generation across the globe.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="pt-6">
+                <Link
+                  href="/about"
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-amber-600 to-orange-600 text-white rounded-2xl font-semibold text-lg hover:shadow-2xl hover:shadow-orange-300 transition-all duration-300 transform hover:-translate-y-1"
+                >
+                  Learn More About Us
+                  <span className="text-xl">→</span>
+                </Link>
+              </div>
             </div>
-            <div className="p-6 bg-gray-50 rounded-lg shadow-sm border">
-              <div className="text-yellow-400 text-lg">★★★★★</div>
-              <div className="font-semibold mt-2">"Perfect for festivals"</div>
-              <div className="text-gray-600 mt-2">Ordered for Chhath Puja, and everyone loved it. Will order again!</div>
-              <div className="text-sm text-gray-500 mt-4">— Ankit Kumar</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Story & Mission */}
-      <section id="story" className="bg-gray-50 py-12">
-        <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-8 items-center">
-          <div>
-            <h3 className="text-3xl font-bold">Our Story</h3>
-            <p className="mt-4 text-gray-700">A journey of passion, purity, and the pursuit of an Indian dream.</p>
-
-            <h4 className="mt-6 font-semibold text-xl">Our Mission</h4>
-            <p className="text-gray-600 mt-2">To be India's finest snacks brand, delivering high-quality, hygienic, and affordable traditional snacks that you can trust and enjoy.</p>
-
-            <h4 className="mt-6 font-semibold text-xl">The Beginning</h4>
-            <p className="text-gray-600 mt-2">The journey began when a young founder noticed unhygienic traditional snacks during Chhath Puja and decided to make pure, traditional, and hygienic snacks available year-round.</p>
-
-            <Link
-              href="/about"
-              className="inline-block mt-6 px-6 py-3 bg-orange-600 text-white rounded-lg font-semibold hover:bg-orange-700 transition-colors"
-            >
-              Learn More About Us
-            </Link>
-          </div>
-          <div>
-            <img
-              src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?q=80&w=600"
-              alt="Traditional Kitchen"
-              className="rounded-lg shadow-lg w-full"
-            />
           </div>
         </div>
       </section>
 
       {/* Core Values */}
-      <section id="values" className="max-w-6xl mx-auto px-6 py-12">
-        <h3 className="text-3xl font-bold text-center">Our Core Values</h3>
-        <p className="text-gray-600 mt-2 text-center">These principles guide everything we do.</p>
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h3 className="text-4xl font-bold mb-4">Our <span className="text-amber-600">Core Values</span></h3>
+            <p className="text-gray-600 text-lg">The principles that guide every batch we make</p>
+          </div>
+          
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { icon: "🌱", title: "Sustainability", desc: "Eco-friendly packaging and responsible sourcing", color: "from-green-400 to-emerald-500" },
+              { icon: "⭐", title: "Quality First", desc: "Premium ingredients, traditional methods", color: "from-blue-400 to-cyan-500" },
+              { icon: "❤️", title: "Health Focus", desc: "No artificial colors or preservatives", color: "from-red-400 to-pink-500" },
+              { icon: "👥", title: "Community", desc: "Supporting local farmers & artisans", color: "from-purple-400 to-violet-500" },
+            ].map((value, index) => (
+              <div 
+                key={index}
+                className="group relative bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-transparent transform hover:-translate-y-2"
+              >
+                <div className="relative z-10">
+                  <div className={`w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-r ${value.color} flex items-center justify-center text-3xl text-white shadow-lg`}>
+                    {value.icon}
+                  </div>
+                  <h5 className="font-bold text-xl text-center mb-3">{value.title}</h5>
+                  <p className="text-gray-600 text-center">{value.desc}</p>
+                </div>
+                <div className="absolute inset-0 rounded-3xl bg-gradient-to-r opacity-0 group-hover:opacity-5 transition-opacity duration-300 from-amber-200 to-orange-200"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-white p-6 rounded-lg shadow-lg border text-center">
-            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl">🌱</span>
-            </div>
-            <h5 className="font-semibold text-lg">Sustainability</h5>
-            <p className="text-sm text-gray-600 mt-2">Responsible sourcing and eco-friendly packaging.</p>
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-amber-600 to-orange-600 text-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h3 className="text-4xl font-bold mb-6">Ready to Taste Tradition?</h3>
+          <p className="text-xl opacity-90 mb-10 max-w-2xl mx-auto">
+            Join thousands of happy customers enjoying authentic traditional snacks delivered fresh to their homes.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/products"
+              className="px-10 py-4 bg-white text-amber-700 rounded-2xl font-bold text-lg hover:bg-amber-50 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
+            >
+              Order Now
+            </Link>
+            <Link
+              href="/contact"
+              className="px-10 py-4 border-2 border-white rounded-2xl font-bold text-lg hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-1"
+            >
+              Contact Us
+            </Link>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow-lg border text-center">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl">⭐</span>
+          
+          <div className="mt-12 pt-8 border-t border-white/20">
+            <div className="flex justify-center gap-6">
+              <a href="#" className="text-2xl hover:scale-110 transition-transform">
+                <FaInstagram />
+              </a>
+              <a href="#" className="text-2xl hover:scale-110 transition-transform">
+                <FaFacebook />
+              </a>
+              <a href="#" className="text-2xl hover:scale-110 transition-transform">
+                <FaTwitter />
+              </a>
             </div>
-            <h5 className="font-semibold text-lg">Quality</h5>
-            <p className="text-sm text-gray-600 mt-2">Only premium ingredients for exceptional snacks.</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-lg border text-center">
-            <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl">❤️</span>
-            </div>
-            <h5 className="font-semibold text-lg">Health</h5>
-            <p className="text-sm text-gray-600 mt-2">Nutritious options without artificial additives.</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-lg border text-center">
-            <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl">👥</span>
-            </div>
-            <h5 className="font-semibold text-lg">Community</h5>
-            <p className="text-sm text-gray-600 mt-2">Supporting local farmers and giving back.</p>
+            <p className="mt-4 opacity-80">Follow us for updates, recipes, and more!</p>
           </div>
         </div>
       </section>
